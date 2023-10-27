@@ -9,6 +9,8 @@ import { Login } from "./components/Login/Login";
 import { Create } from "./components/Create/Create";
 import { useEffect, useState } from "react";
 
+import { ToDoContext } from "./contexts/ToDoContext";
+
 import * as gameService from "./service/gameService"
 
 
@@ -19,12 +21,11 @@ function App() {
 
     useEffect(() => {
         gameService.getAll()
-        .then(res => setGame(res));
+            .then(res => setGame(res));
     }, []);
 
     const addGame = (data) => {
-        let res = gameService.create(data)
-        console.log(res);
+        let res = gameService.create(data);
 
         // .then(res => setGame(state => ({...state, res})))
         // .then(navigate("catalog"))
@@ -32,25 +33,32 @@ function App() {
 
     const editGame = async (data, gameId) => {
         await gameService.edit(data, gameId);
-        
+
         navigate("/catalog")
     }
 
+    const contexValue = {
+        games,
+
+    }
+
     return (
-        <div id="box">
-            <Header />
-            <main id="main-content">
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/catalog" element={<Catalog games={games} />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                    <Route path="/create" element={<Create addGame={addGame} />} />
-                    <Route path="/edit/:gameId" element={<Edit editGame={editGame} />} />
-                    <Route path="/details/:gameId" element={<Details user={user} />} />
-                </Routes>
-            </main>
-        </div>
+        <ToDoContext.Provider value={contexValue} >
+            <div id="box">
+                <Header />
+                <main id="main-content">
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/catalog" element={<Catalog games={games} />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                        <Route path="/create" element={<Create addGame={addGame} />} />
+                        <Route path="/edit/:gameId" element={<Edit editGame={editGame} />} />
+                        <Route path="/details/:gameId" element={<Details user={user} />} />
+                    </Routes>
+                </main>
+            </div>
+        </ToDoContext.Provider>
     );
 }
 

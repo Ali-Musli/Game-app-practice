@@ -1,8 +1,10 @@
+import { useContext } from "react";
+import { ToDoContext } from "../../contexts/ToDoContext";
 import { CatalogItem } from "./CatalogItem/CatalogItem";
 
-export function Catalog({
-    games
-}) {
+export function Catalog() {
+
+    const {games} = useContext(ToDoContext)
     return (
         <section id="catalog-page">
             <h1>All Games</h1>
